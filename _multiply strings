@@ -1,0 +1,51 @@
+class Solution:
+    def multiply(self, num1: str, num2: str) -> str:
+        def addString(num1, num2):
+            carry = 0
+            l1 = len(num1)
+            l2 = len(num2)
+            if l1 < l2:
+                num1 = '0' * (l2 - l1) + num1
+            elif l2 < l1:
+                num2 = '0' * (l1 - l2) + num2
+            
+            ans = []
+            for i in range(max(l1, l2) - 1, -1, -1):
+                n = int(num1[i]) + int(num2[i]) + carry
+                carry = n // 10
+                ans.append(str(n % 10))
+            
+            if carry:
+                ans.append(str(carry))
+            ans.reverse()
+            return ''.join(ans)
+
+        def multiplyOneDigit(num1, digit2):
+            carry = 0
+            l = len(num1)
+            d = int(digit2)
+            ans = []
+            for i in range(l - 1, -1, -1):
+                n = (int(num1[i]) * d) + carry
+                carry = n // 10
+                ans.append(str(n % 10))
+            
+            if carry:
+                ans.append(str(carry))
+            ans.reverse()
+            return ans
+        
+        ans = ''
+        rev = num2[::-1]
+        t = 0
+        for i in rev:
+            m = multiplyOneDigit(num1, i)
+            for j in range(t):
+                m.append('0')
+            
+            ans = addString(ans, ''.join(m))
+            t += 1
+        
+        if ans == '0' * len(ans):
+            return '0'
+        return ans.lstrip('0')
