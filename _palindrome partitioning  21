@@ -1,0 +1,23 @@
+from math import inf
+
+class Solution:
+    _cache: dict[int, int] = {}
+    def minCut(self, s: str) -> int:
+        _cache = [0]*(len(s)+1)
+
+        for i in reversed(range(len(s))):
+            if len(s[i:]) == 1:
+                _cache[i] = 0
+            
+            if s[i:] == s[i:][::-1]:
+                _cache[i] = 0
+            
+            minimum = inf
+            for j in reversed(range(len(s[i:]))):
+                s1 = s[i:][:j+1]
+                s2 = s[i:][j+1:]
+                if s1 == s1[::-1]:
+                    minimum = min(minimum, _cache[i+j+1])
+            _cache[i] = 1 + minimum
+        
+        return _cache[0] - 1
